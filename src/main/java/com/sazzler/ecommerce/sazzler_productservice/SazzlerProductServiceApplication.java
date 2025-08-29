@@ -3,8 +3,7 @@ package com.sazzler.ecommerce.sazzler_productservice;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-
-import javax.sql.DataSource;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class SazzlerProductServiceApplication {
