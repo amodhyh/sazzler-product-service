@@ -35,8 +35,8 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
-    implementation project(':api-definition:lib')
-    implementation project(':util:lib')
+    implementation project(':api-definition')
+    implementation project(':util')
 
     testImplementation 'org.testcontainers:mongodb'
     compileOnly 'org.projectlombok:lombok'

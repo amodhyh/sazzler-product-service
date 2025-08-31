@@ -1,7 +1,7 @@
 package com.sazzler.ecommerce.sazzler_productservice.Service;
 
-import com.sazzler.ecommerce.ExceptionHandlers.ProductNotFound;
 import com.sazzler.ecommerce.sazzler_productservice.Entity.Product;
+import com.sazzler.ecommerce.product_service.Exceptions.ProductNotFound;
 import com.sazzler.ecommerce.sazzler_productservice.Repository.ProductRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

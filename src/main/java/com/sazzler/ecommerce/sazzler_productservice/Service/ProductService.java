@@ -23,18 +23,18 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<String> createProduct(ProductRequest productRequest) {
-        if(productRepo.findById(productRequest.getId())==null){
+        if(productRepo.findById(productRequest.id())==null){
            Product temp= Product.builder()
                     .creationDate(LocalDateTime.now())
-                    .id(productRequest.getId())
-                    .price(productRequest.getPrice())
-                    .name(productRequest.getName())
+                    .id(productRequest.id())
+                    .price(productRequest.price())
+                    .name(productRequest.name())
                     .build();
             productRepo.save(temp);
             return new ResponseEntity<>("Product Created Successfully! ",HttpStatus.CREATED);
         }
         else {
-            throw new ProductIDAlreadyExists("Product ID "+productRequest.getId()+"Already Exists");
+            throw new ProductIDAlreadyExists("Product ID "+productRequest.id()+"Already Exists");
         }
 
     }

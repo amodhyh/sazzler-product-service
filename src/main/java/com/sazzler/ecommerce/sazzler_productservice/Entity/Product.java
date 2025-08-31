@@ -21,7 +21,7 @@ public class Product {
     private String name;
 
     @Id
-    private Long id;
+    private int id;
 
     private String description;
 
