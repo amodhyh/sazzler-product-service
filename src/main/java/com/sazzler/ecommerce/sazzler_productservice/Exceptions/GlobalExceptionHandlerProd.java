@@ -1,6 +1,6 @@
 package com.sazzler.ecommerce.sazzler_productservice.Exceptions;
 
-import com.sazzler.ecommerce.product_service.Exceptions.ProductNotFound;
+import com.sazzler.ecommerce.sazzler_productservice.Exceptions.ProductNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

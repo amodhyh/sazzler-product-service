@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: sazzler-product-service
+
+
+# Eureka client configuration
+
+
+# Actuator configuration for monitoring
+
+management:
+  tracing:
+    enabled: false
+  endpoint:
+    web:
+      exposure:
+        include: health,info
+
+server:
+    port: 8083
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    enabled: true
+    service-url:
+        defaultZone: http://amodhyh:1234@localhost:8761/eureka/
