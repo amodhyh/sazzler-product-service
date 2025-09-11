@@ -1,12 +1,16 @@
 spring:
   application:
     name: sazzler-product-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/sazzler_db
 
 
 # Eureka client configuration
 
 
 # Actuator configuration for monitoring
+
 
 management:
   tracing:

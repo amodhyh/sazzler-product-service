@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 public class ProductController  {
     private final ProductService productService;
@@ -28,7 +30,7 @@ public class ProductController  {
     @GetMapping(value = "/products")
     public String getProducts() {
         // You may want to call productRetrieveService.getProducts and convert result to String
-        return productRetrieveService.getProducts().getBody().toString();
+        return Objects.requireNonNull(productRetrieveService.getProducts().getBody()).toString();
     }
 
 
