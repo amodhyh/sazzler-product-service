@@ -4,6 +4,22 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/sazzler_db
+  kafka:
+    topic:
+      name: sazzler-product-topic
+#    the kafka broker address
+    bootstrap-servers: localhost:9092
+#    the broker adress and serializer and deserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: sazzler-product-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+
+
 
 
 # Eureka client configuration
@@ -11,14 +27,12 @@ spring:
 
 # Actuator configuration for monitoring
 
-
 management:
-  tracing:
-    enabled: false
-  endpoint:
+  endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus
+
 
 server:
     port: 8083
