@@ -12,48 +12,36 @@
 # most recent version of that image when you build your Dockerfile.
 # If reproducibility is important, consider using a versioned tag
 # (e.g., alpine:3.17.2) or SHA (e.g., alpine@sha256:c41ab5c992deb4fe7e5da09f67a8804a46bd0592bfdf0b1847dde0e0889d2bff).
-FROM gradle:8.12.1-jdk21 AS build
-
+FROM gradle:8.12.1-jdk21 AS builder
 WORKDIR /home/gradle/project
 
-# Copy root Gradle settings so multi-project build works
+# copy root Gradle metadata so multi-project build and pluginManagement work
 COPY settings.gradle settings.gradle
-COPY gradle gradle
+COPY gradle/ gradle/
 COPY gradle.properties gradle.properties
-COPY build.gradle build.gradle
+COPY gradlew gradlew
+COPY gradlew.bat gradlew.bat
 
-# Copy only this service's source
+COPY gradle/wrapper gradle/wrapper
+# optional: cache Gradle dependencies between builds
+ENV GRADLE_USER_HOME=/cache/.gradle
+VOLUME /cache/.gradle
+
+# copy only this service sources (build context must be repo root)
 COPY Sazzler-Product-Service/ Sazzler-Product-Service/
-WORKDIR /home/gradle/project/Sazzler-Product-Service
+# copy dependent local projects so project(':util') and project(':api-definition') are available
+COPY util/ util/
+COPY api-definition/ api-definition/
+WORKDIR /home/gradle/project
 
-# Build (skip tests to speed up in CI). Adjust as needed.
-RUN gradle clean build --no-daemon -x test
+# ensure wrapper is executable and build only the module
+RUN chmod +x ./gradlew
+# Use the image's Gradle to avoid wrapper download inside the container
+RUN gradle :Sazzler-Product-Service:clean :Sazzler-Product-Service:build --no-daemon -x test
 
-################################################################################
-# Create a final stage for running your application.
-#3. Runtime stage of the application.
-#
-# The following commands copy the output from the "build" stage above and tell
-# the container runtime to execute it when the image is run. Ideally this stage
-# contains the minimal runtime dependencies for the application as to produce
-# the smallest image possible. This often means using a different and smaller
-# image than the one used for building the application, but for illustrative
-#The runtime section uses a JRE image to run your built Spring Boot JAR. It sets the
-#working directory, copies the JAR from the build stage, exposes the app port, and sets the entrypoint.
+# runtime stage
 FROM eclipse-temurin:21-jre AS runtime
 WORKDIR /app
-#Copy the built JAR file from the build stage to the runtime stage.
-#The --from=build flag specifies that the source of the copied file is from the "build" stage.
-#The path /app/build/libs/*.jar assumes that the build process outputs the JAR file
-# to the /app/build/libs/ directory in the build stage.
-# Adjust the path as necessary to match your build output.
-COPY --from=build /home/gradle/project/Sazzler-Product-Service/build/libs/*.jar app.jar
-# Expose the port that the application will run on.
-# This is a documentation instruction and does not actually publish the port.
-# The port number should match the one your application is configured to use.
-EXPOSE 8080
-# The ENTRYPOINT instruction specifies the command that will be run when a container
-# is started from the image. Here, it runs the Java application using the java -jar
-# command, pointing to the JAR file copied earlier.
-ENTRYPOINT ["java", "-jar", "app.jar"]
-# purposes, we're using the same image for both build and runtime.
+COPY --from=builder /home/gradle/project/Sazzler-Product-Service/build/libs/*.jar app.jar
+EXPOSE 8082
+ENTRYPOINT ["java","-jar","/app/app.jar"]
