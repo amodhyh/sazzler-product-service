@@ -5,15 +5,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
 @Service
 public class MessageProducerService {
 
-//    the template is used to send messages to kafka topic
+//   the template is used to send messages to kafka topic
     private final KafkaTemplate<String, String> kafkaTemplate;
     //the topic name is used to specify the topic to which the message will be sent
-    @Value("${kafka.topic.name}")
-    private final String TOPIC_NAME;
+    @Value("${spring.kafka.topic.name}") //works with field injection not constructor injection
+    private  String TOPIC_NAME;
+
+     public MessageProducerService(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
 
     public void sendMessage(String key,String message) {
 

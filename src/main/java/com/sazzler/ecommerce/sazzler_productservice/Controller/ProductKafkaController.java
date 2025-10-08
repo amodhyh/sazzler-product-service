@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/kafka")
+@RequestMapping("/product")
 public class ProductKafkaController {
     private final MessageProducerService messageProducerService;
 
@@ -14,7 +14,7 @@ public class ProductKafkaController {
         this.messageProducerService = messageProducerService;
     }
 
-    @PostMapping("/send")
+    @PostMapping("/kafka/send")
     public void sendMessage(String key, String message) {
         messageProducerService.sendMessage(key, message);
     }
