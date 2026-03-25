@@ -1,7 +1,7 @@
 package com.sazzler.ecommerce.sazzler_productservice.Service;
 
+import com.sazzler.ecommerce.api_def.product_service.DTO.ProductEvent;
 import jakarta.annotation.PreDestroy;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,24 +12,24 @@ import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
-public class MessageProducerService {
+public class ProductEventProducerService {
 
 //   the template is used to send messages to kafka topic
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, ProductEvent> kafkaTemplate;
     //the topic name is used to specify the topic to which the message will be sent
     private  String TOPIC_NAME;
 
-     public MessageProducerService(@Value("${spring.kafka.topic.name}") String topicName, KafkaTemplate<String, String> kafkaTemplate) {
+     public ProductEventProducerService(@Value("${spring.kafka.topic.name}") String topicName, KafkaTemplate<String, ProductEvent> kafkaTemplate) {
          this.kafkaTemplate = kafkaTemplate;
          this.TOPIC_NAME=topicName;
 
     }
 
-    public void sendMessage(String key,String message) {
+    public void sendMessage(String key,ProductEvent productEvent) {
         //Async with Callbacks
 //        can process many other tasks or requests while the message is being sent in the background.High Throughput
         //non-blocking threads
-        CompletableFuture<SendResult<String,String>> kafkFuture = kafkaTemplate.send(TOPIC_NAME,key, message);
+        CompletableFuture<SendResult<String,ProductEvent>> kafkFuture = kafkaTemplate.send(TOPIC_NAME,key, productEvent);
         //when complete -> non-blocking fast callbacks
         //when complete async -> blocking slow callbacks with heacy computation and I/O operations.It assigns a separate
         // thread pool for executing the callbacks.
@@ -46,7 +46,7 @@ public class MessageProducerService {
                         log.error("Error sending message to topic:{}.key : {}, message : {}, exception : {} ",
                                 TOPIC_NAME,
                                 key,
-                                message,
+                                productEvent.toString(),
                                 except.getMessage());
                     }
                 }

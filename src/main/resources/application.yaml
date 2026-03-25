@@ -7,6 +7,7 @@ spring:
   kafka:
     topic:
       name: sazzler-product-topic
+      
 #    the kafka broker address
     bootstrap-servers: localhost:9092
 #    the broker adress and serializer and deserializer
