@@ -1,6 +1,6 @@
 package com.sazzler.ecommerce.sazzler_productservice.Service;
 
-import com.sazzler.ecommerce.api_def.product_service.DTO.ProductEvent;
+import com.sazzler.ecommerce.sazzler_api_def.product_service.DTO.ProductEvent;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package com.sazzler.ecommerce.sazzler_productservice.Controller;
 
-import com.sazzler.ecommerce.api_def.product_service.DTO.ProductRequest;
+import com.sazzler.ecommerce.sazzler_api_def.product_service.DTO.ProductRequest;
 import com.sazzler.ecommerce.sazzler_productservice.Service.ProductRetrieveService;
 import com.sazzler.ecommerce.sazzler_productservice.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.sazzler.ecommerce.sazzler_productservice.Service;
 
-import com.sazzler.ecommerce.api_def.product_service.DTO.ProductRequest;
+import com.sazzler.ecommerce.sazzler_api_def.product_service.DTO.ProductRequest;
 import com.sazzler.ecommerce.sazzler_productservice.Entity.Product;
 import com.sazzler.ecommerce.sazzler_productservice.Exceptions.ProductIDAlreadyExists;
 import com.sazzler.ecommerce.sazzler_productservice.Repository.ProductRepo;

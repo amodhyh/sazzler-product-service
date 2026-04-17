@@ -1,6 +1,6 @@
 package com.sazzler.ecommerce.sazzler_productservice.Controller;
 
-import com.sazzler.ecommerce.api_def.product_service.DTO.ProductEvent;
+import com.sazzler.ecommerce.sazzler_api_def.product_service.DTO.ProductEvent;
 import com.sazzler.ecommerce.sazzler_productservice.Service.ProductEventProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
