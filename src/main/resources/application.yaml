@@ -1,13 +1,20 @@
 spring:
   application:
     name: sazzler-product-service
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/sazzler_db
+  datasource:
+    url: jdbc:postgresql://localhost:5433/sazzler_order_db
+    username: amodhyh
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
   kafka:
     topic:
       name: sazzler-product-topic
-      
+
 #    the kafka broker address
     bootstrap-servers: localhost:9092
 #    the broker adress and serializer and deserializer
@@ -19,13 +26,6 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
 
-
-
-
-
-# Eureka client configuration
-
-
 # Actuator configuration for monitoring
 
 management:
@@ -34,9 +34,7 @@ management:
       exposure:
         include: health,info,prometheus
 
-
-server:
-    port: 8083
+# Eureka client configuration
 eureka:
   instance:
     prefer-ip-address: true
@@ -44,3 +42,6 @@ eureka:
     enabled: true
     service-url:
         defaultZone: http://amodhyh:1234@localhost:8761/eureka/
+
+server:
+    port: 8083

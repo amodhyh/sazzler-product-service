@@ -17,7 +17,7 @@ public class ProductEventProducerService {
 //   the template is used to send messages to kafka topic
     private final KafkaTemplate<String, ProductEvent> kafkaTemplate;
     //the topic name is used to specify the topic to which the message will be sent
-    private  String TOPIC_NAME;
+    private final String TOPIC_NAME;
 
      public ProductEventProducerService(@Value("${spring.kafka.topic.name}") String topicName, KafkaTemplate<String, ProductEvent> kafkaTemplate) {
          this.kafkaTemplate = kafkaTemplate;

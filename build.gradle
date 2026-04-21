@@ -39,7 +39,7 @@ dependencies {
     // so it is needed at both compile-time and runtime.
     implementation 'io.micrometer:micrometer-registry-prometheus'
 
-    implementation project(':api-definition:lib')
+    implementation project(':api-definition')
     implementation project(':util')
 
     testImplementation 'org.testcontainers:mongodb'
