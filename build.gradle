@@ -34,14 +34,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.kafka:spring-kafka'
+    //as the code interacts with its classes directly for metrics configuration,
+    // so it is needed at both compile-time and runtime.
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
-    implementation project(':api-definition:lib')
-    implementation project(':util:lib')
+    implementation project(':api-definition')
+    implementation project(':util')
 
     testImplementation 'org.testcontainers:mongodb'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
