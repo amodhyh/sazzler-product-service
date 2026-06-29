@@ -28,13 +28,13 @@ public class ProductController  {
             @RequestParam("key") String key, // The partition key can stay as a param
             @RequestBody ProductEvent productEvent // The DTO comes in the request body
     ) {
-        log.info("Received request to send event for Product ID: {}", productEvent.productId());
-
         // Validation for Objects
-        if (key == null || key.isBlank() ) {
+        if (key == null || key.isBlank() || productEvent == null) {
             log.warn("Invalid key or product event provided");
             return ResponseEntity.badRequest().build();
         }
+
+        log.info("Received request to send event for Product ID: {}", productEvent.productId());
 
         // Pass the object to the service
         productEventProducerService.sendMessage(key, productEvent);
@@ -57,9 +57,9 @@ public class ProductController  {
         return Objects.requireNonNull(productRetrieveService.getProducts().getBody()).toString();
     }
 
-    @GetMapping
-    public String healthCheck() {
-        return Objects.requireNonNull(productRetrieveService.getProducts().getBody()).toString();
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("UP");
     }
 
 
