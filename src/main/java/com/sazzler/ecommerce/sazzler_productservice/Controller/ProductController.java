@@ -58,9 +58,9 @@ public class ProductController  {
         return Objects.requireNonNull(productRetrieveService.getProducts().getBody()).toString();
     }
 
-    @GetMapping
-    public String healthCheck() {
-        return Objects.requireNonNull(productRetrieveService.getProducts().getBody()).toString();
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("UP");
     }
 
 
