@@ -37,7 +37,7 @@ public class ProductService {
             productRepo.save(product);
 
             ProductEvent event = new ProductEvent(
-                    String.valueOf(product.getId()),
+                    product.getId(),
                     product.getName(),
                     product.getPrice(),
                     ProductEventType.CREATED
@@ -48,6 +48,5 @@ public class ProductService {
         } else {
             throw new ProductIDAlreadyExists("Product ID " + productRequest.id() + " Already Exists");
         }
-
     }
 }
