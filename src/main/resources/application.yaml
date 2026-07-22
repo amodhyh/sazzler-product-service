@@ -1,15 +1,10 @@
 spring:
   application:
     name: sazzler-product-service
-  datasource:
-    url: jdbc:postgresql://localhost:5433/sazzler_order_db
-    username: amodhyh
-    password: 1234
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/sazzler_product_db}
+
 
   kafka:
     topic:
@@ -44,4 +39,4 @@ eureka:
         defaultZone: http://amodhyh:1234@localhost:8761/eureka/
 
 server:
-    port: 8083
+  port: 8082

@@ -1,5 +1,7 @@
 package com.sazzler.ecommerce.sazzler_productservice.Service;
 
+import com.sazzler.ecommerce.sazzler_api_def.product_service.DTO.ProductEvent;
+import com.sazzler.ecommerce.sazzler_api_def.product_service.DTO.ProductEventType;
 import com.sazzler.ecommerce.sazzler_api_def.product_service.DTO.ProductRequest;
 import com.sazzler.ecommerce.sazzler_productservice.Entity.Product;
 import com.sazzler.ecommerce.sazzler_productservice.Exceptions.ProductIDAlreadyExists;
@@ -14,28 +16,48 @@ import java.time.LocalDateTime;
 
 @Service
 public class ProductService {
-    final private ProductRepo productRepo;
+    private final ProductRepo productRepo;
+    private final ProductEventProducerService productEventProducerService;
 
     @Autowired
-    public ProductService(ProductRepo productRepo) {
+    public ProductService(ProductRepo productRepo, ProductEventProducerService productEventProducerService) {
         this.productRepo = productRepo;
+        this.productEventProducerService = productEventProducerService;
     }
 
     @Transactional
-    public ResponseEntity<String> createProduct(ProductRequest productRequest) {
-        if(productRepo.findById(productRequest.id())==null){
-           Product temp= Product.builder()
+    public String createProduct(ProductRequest productRequest) {
+        if (!productRepo.existsById(productRequest.id())) {
+            Product product = Product.builder()
                     .creationDate(LocalDateTime.now())
                     .id(productRequest.id())
                     .price(productRequest.price())
                     .name(productRequest.name())
                     .build();
-            productRepo.save(temp);
-            return new ResponseEntity<>("Product Created Successfully! ",HttpStatus.CREATED);
-        }
-        else {
-            throw new ProductIDAlreadyExists("Product ID "+productRequest.id()+"Already Exists");
-        }
+            productRepo.save(product);
 
+            ProductEvent event = new ProductEvent(
+                    product.getId(),
+                    product.getName(),
+                    product.getPrice(),
+                    ProductEventType.CREATED
+            );
+            if (org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()) {
+                org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                    new org.springframework.transaction.support.TransactionSynchronization() {
+                        @Override
+                        public void afterCommit() {
+                            productEventProducerService.sendMessage(String.valueOf(product.getId()), event);
+                        }
+                    }
+                );
+            } else {
+                productEventProducerService.sendMessage(String.valueOf(product.getId()), event);
+            }
+
+            return "Product Created Successfully! ";
+        } else {
+            throw new ProductIDAlreadyExists("Product ID " + productRequest.id() + " Already Exists");
+        }
     }
 }
