@@ -26,8 +26,8 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<String> createProduct(ProductRequest productRequest) {
-        if (productRepo.findById(productRequest.id()) == null) {
+    public String createProduct(ProductRequest productRequest) {
+        if (!productRepo.existsById(productRequest.id())) {
             Product product = Product.builder()
                     .creationDate(LocalDateTime.now())
                     .id(productRequest.id())
@@ -42,9 +42,20 @@ public class ProductService {
                     product.getPrice(),
                     ProductEventType.CREATED
             );
-            productEventProducerService.sendMessage(String.valueOf(product.getId()), event);
+            if (org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()) {
+                org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                    new org.springframework.transaction.support.TransactionSynchronization() {
+                        @Override
+                        public void afterCommit() {
+                            productEventProducerService.sendMessage(String.valueOf(product.getId()), event);
+                        }
+                    }
+                );
+            } else {
+                productEventProducerService.sendMessage(String.valueOf(product.getId()), event);
+            }
 
-            return new ResponseEntity<>("Product Created Successfully! ", HttpStatus.CREATED);
+            return "Product Created Successfully! ";
         } else {
             throw new ProductIDAlreadyExists("Product ID " + productRequest.id() + " Already Exists");
         }

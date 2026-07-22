@@ -48,7 +48,7 @@ public class ProductController  {
     @ResponseStatus(HttpStatus.CREATED)
     public String createProduct(@RequestBody ProductRequest productRequest) {
         // You may want to call productService.createProduct here and return a String result
-        return productService.createProduct(productRequest).getBody();
+        return productService.createProduct(productRequest);
     }
 //
     @GetMapping(value = "/products")
